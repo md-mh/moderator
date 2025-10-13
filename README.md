@@ -1,69 +1,63 @@
 # Moderator Management Feature
 
-This project includes a simple **Moderator Management** dashboard built with Next.js, React, TypeScript, and TanStack Query, featuring:
-
-- Listing all moderators
-- Adding a new moderator via a modal form
-- Deleting moderators
-
-## File Structure & Flow
-
-- **`frontend/src/app/(private)/moderator/page.tsx`**  
-  Renders the Moderator List and handles displaying/modals for adding and deleting moderators.
-
-- **`frontend/src/app/(private)/moderator/AddModeratorModal.tsx`**  
-  Modal form for adding new moderators using React Hook Form and zod for validation.
-
-- **`frontend/src/types/moderator.ts`**  
-  Types and Zod schema for moderator entities and form validation.
-
-- **`frontend/src/services/Moderator.service.ts`**  
-  Service hooks for backend API operations (add, delete, fetch list), using TanStack Query and Axios.
-
-## How It Works
-
-1. **List Moderators:**  
-   The moderator page fetches a paginated list using the service hook and displays it in a responsive table.
-
-2. **Add Moderator:**  
-   Clicking "Add Moderator" opens a modal form. Inputs are validated before sending. On success, the list auto-refreshes.
-
-3. **Delete Moderator:**  
-   Each row in the moderator table has a 'Delete' button. Clicking it will remove the moderator after confirming via API.
-
-## Key Packages Used
-
-- **Next.js & React** (frontend UI)
-- **TanStack Query** (`@tanstack/react-query`) for data-fetching and mutations
-- **Zod** for schema validation
-- **React Hook Form** for performant, flexible forms
-- **React Toastify** for notifications
-
-## Example: Adding a Moderator
-
-1. Click "Add Moderator".
-2. Fill out the form fields (name, email, password, confirm password).
-3. Submit.
-   - Form is validated.
-   - On success, you see a toast and the list updates.
-
-## Example: Deleting a Moderator
-
-- Press 'Delete' on any moderator row and confirm the action.
-
-## Backend API Layer
-
-The services expect the following endpoints:
-
-- `POST moderators/add` to create
-- `DELETE moderators/:id` to delete
-- `GET moderators/all` for list (with pagination params)
-
-## Customization
-
-- **Form and schema** are easily adjustable in `moderator.ts` and `AddModeratorModal.tsx`.
-- **Columns and API endpoints** in `page.tsx` and `Moderator.service.ts` can be updated to suit your actual backend or data model.
+This project offers a focused **Moderator Management** system, separated into frontend and backend sections for clarity. Below, you’ll find explanations of the main components and a deeper dive into how moderators are managed.
 
 ---
 
-_See the respective files for full implementation details and to further customize for your needs._
+## Frontend
+
+The frontend is built with **Next.js**, **React**, **TypeScript**, and uses **TanStack Query** for efficient server state management. The moderator feature consists of:
+
+- **Listing Moderators:**  
+  All registered moderators are shown in a paginated, responsive table. Information includes name, email, unique user ID, join date, and actions.
+
+- **Adding Moderators:**  
+  Users can add a moderator by clicking "Add Moderator", which opens a modal form. This form uses **React Hook Form** for state management and **Zod** for validation. On submission, it triggers an API call to add a moderator, with error handling and UI feedback.
+
+- **Deleting Moderators:**  
+  Each moderator row features a delete button. When clicked, a request is sent to the backend to remove the moderator, and the frontend updates accordingly.
+
+### Key Packages Used
+
+- **Next.js & React** — UI and page routing
+- **TanStack Query** (`@tanstack/react-query`) — Data-fetching, caching, and mutations
+- **Zod** — Schema definition and validation for form data
+- **React Hook Form** — Form handling and validation
+- **React Toastify** — User notifications for success/error
+
+### Primary Files & Their Roles
+
+- **`frontend/src/app/(private)/moderator/page.tsx`**  
+  Displays the list of moderators and manages interactions for adding and deleting.
+
+- **`frontend/src/app/(private)/moderator/AddModeratorModal.tsx`**  
+  Contains the modal pop-up form for adding a new moderator, with validation logic.
+
+- **`frontend/src/types/moderator.ts`**  
+  Defines the moderator data structure (ID, name, email, password, etc.), as well as the Zod validation schema for moderator forms.  
+  _Moderator parts explained:_
+
+  - `Moderator` interface details the shape of each moderator.
+  - `ModeratorList` defines the expected list response.
+  - `moderatorSchema` uses Zod for strong validation, including custom checks (e.g. matching passwords).
+
+- **`frontend/src/services/Moderator.service.ts`**  
+  Exposes hooks for communicating with the backend for moderator actions:
+  - `useAddModeratorMutation()` to add a new moderator.
+  - `useDeleteModeratorMutation()` to remove one.
+  - `useGetModeratorListQuery()` to fetch a list of moderators.  
+    Each uses TanStack Query and shows a toast notification on success.
+
+---
+
+## Backend API
+
+_This project expects the following backend endpoints for moderator management:_
+
+- `POST moderators/add`: Create a new moderator (expects name, email, password, confirmPassword, etc.)
+- `DELETE moderators/:id`: Remove an existing moderator by ID
+- `GET moderators/all`: Retrieve a list of all moderators (supports pagination via parameters)
+
+---
+
+_For more detailed code and further customization tips, check out the corresponding source files in the frontend directory._
